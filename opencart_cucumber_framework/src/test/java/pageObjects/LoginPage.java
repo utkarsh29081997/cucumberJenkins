@@ -10,14 +10,20 @@ public class LoginPage extends BasePage {
 		super(driver);
 	}
 	
-	@FindBy(xpath = "//input[@id='input-email']")
+	@FindBy(xpath = "//h5[@class='oxd-text oxd-text--h5 orangehrm-login-title']")
+	static WebElement loginTitle;
+
+	@FindBy(xpath = "//input[@name='username']")
 	WebElement txtEmailAddress;
 
-	@FindBy(xpath = "//input[@id='input-password']")
+	@FindBy(xpath = "//input[@name='password']")
 	WebElement txtPassword;
 
-	@FindBy(xpath = "//input[@value='Login']")
+	@FindBy(xpath = "//button[@class='oxd-button oxd-button--medium oxd-button--main orangehrm-login-button']")
 	WebElement btnLogin;
+	
+	@FindBy(xpath="//p[@class='oxd-text oxd-text--p orangehrm-login-forgot-header']")
+	WebElement forgotPasswordLink;
 
 
 	public void setEmail(String email) {
@@ -32,9 +38,14 @@ public class LoginPage extends BasePage {
 		btnLogin.click();
 	}
 	
-	/*
-	 * public String loginTitlecheck(){ return loginTitle.getText(); }
-	 */
+	public String loginTitlecheck(){
+		return loginTitle.getText();
+	}
+	
+	public void clickforgotPasswordLink() {
+		forgotPasswordLink.click();
+	}
+
 	
 
 }

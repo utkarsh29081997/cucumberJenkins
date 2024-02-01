@@ -10,24 +10,25 @@ public class MyAccountPage extends BasePage {
 		super(driver);
 	}
 
-	@FindBy(xpath = "//h2[text()='My Account']") // MyAccount Page heading
-	WebElement msgHeading;
+	@FindBy(xpath = "//h6[@class='oxd-text oxd-text--h6 oxd-topbar-header-breadcrumb-module']") // MyAccount Page heading
+	WebElement dashboardHeading;
 	
-	@FindBy(xpath = "//div[@class='list-group']//a[text()='Logout']")
-	WebElement lnkLogout;
+	@FindBy(xpath = "//div[@class='orangehrm-dashboard-widget-header']//p[@class='oxd-text oxd-text--p']")
+	WebElement timeatWorkHeading;
 	
 
 	public boolean isMyAccountPageExists()   // MyAccount Page heading display status
 	{
 		try {
-			return (msgHeading.isDisplayed());
+			return (dashboardHeading.isDisplayed());
 		} catch (Exception e) {
 			return (false);
 		}
 	}
 
-	public void clickLogout() {
-		lnkLogout.click();
+	public String clickLogout() {
+		String heading = timeatWorkHeading.getText();
+		return heading;
 
 	}
 	

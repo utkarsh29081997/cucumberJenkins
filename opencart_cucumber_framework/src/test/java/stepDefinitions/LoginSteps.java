@@ -18,95 +18,106 @@ import pageObjects.MyAccountPage;
 import utilities.DataReader;
 
 public class LoginSteps {
-	WebDriver driver;
-	HomePage hp;
-	LoginPage lp;
-	MyAccountPage macc;
+     WebDriver driver;
+     HomePage hp;
+     LoginPage lp;
+     MyAccountPage macc;
+  
+     List<HashMap<String, String>> datamap; //Data driven
+     
+   
+    @Given("the user navigates to login page")
+    public void user_navigate_to_login_page() {
+    	
+    	BaseClass.getLogger().info("Goto my account-->Click on Login.. ");
+    	lp=new LoginPage(BaseClass.getDriver());
+    	String title = lp.loginTitlecheck();
+    	assertEquals(title, "Login");
+    }
 
-	List<HashMap<String, String>> datamap; // Data driven
+ 
+    @When("user enters email as {string} and password as {string}")
+    public void user_enters_email_as_and_password_as(String email, String pwd) {
+    	BaseClass.getLogger().info("Entering email and password.. ");
+    	
+    	lp=new LoginPage(BaseClass.getDriver());
+       	lp.setEmail(email);
+        lp.setPassword(pwd);
+        }
 
-	@Given("the user navigates to login page")
-	public void user_navigate_to_login_page() {
+    @When("the user clicks on the Login button")
+    public void click_on_login_button() {
+        lp.clickLogin();
+        BaseClass.getLogger().info("clicked on login button...");
+    	
+        
+    }
 
-		BaseClass.getLogger().info("Goto my account-->Click on Login.. ");
-		/*
-		 * lp=new LoginPage(BaseClass.getDriver()); String title = lp.loginTitlecheck();
-		 * assertEquals(title, "Login");
-		 */
-		hp = new HomePage(BaseClass.getDriver());
 
-		hp.clickMyAccount();
-		hp.clickLogin();
-
-	}
-
-	@When("user enters email as {string} and password as {string}")
-	public void user_enters_email_as_and_password_as(String email, String pwd) {
-		BaseClass.getLogger().info("Entering email and password.. ");
-
-		lp = new LoginPage(BaseClass.getDriver());
-		lp.setEmail(email);
-		lp.setPassword(pwd);
-	}
-
-	@When("the user clicks on the Login button")
-	public void click_on_login_button() {
-		lp.clickLogin();
-		BaseClass.getLogger().info("clicked on login button...");
-
-	}
-
-	@Then("the user should be redirected to the MyAccount Page")
-	public void user_navigates_to_my_account_page() {
-		macc = new MyAccountPage(BaseClass.getDriver());
-		boolean targetpage = macc.isMyAccountPageExists();
-
+    @Then("the user should be redirected to the MyAccount Page")
+    public void user_navigates_to_my_account_page() {
+    	macc=new MyAccountPage(BaseClass.getDriver());
+		boolean targetpage=macc.isMyAccountPageExists();
+				
 		Assert.assertEquals(targetpage, true);
+        
+    }
 
-	}
+    //*******   Data Driven test **************
+    @Then("the user should be redirected to the MyAccount Page by passing email and password with excel row {string}")
+    public void check_user_navigates_to_my_account_page_by_passing_email_and_password_with_excel_data(String rows)
+    {
+        datamap=DataReader.data(System.getProperty("user.dir")+"\\testData\\Opencart_LoginData.xlsx", "Sheet1");
 
-	// ******* Data Driven test **************
-	@Then("the user should be redirected to the MyAccount Page by passing email and password with excel row {string}")
-	public void check_user_navigates_to_my_account_page_by_passing_email_and_password_with_excel_data(String rows) {
-		datamap = DataReader.data(System.getProperty("user.dir") + "\\testData\\Opencart_LoginData.xlsx", "Sheet1");
+        int index=Integer.parseInt(rows)-1;
+        String email= datamap.get(index).get("username");
+        String pwd= datamap.get(index).get("password");
+        String exp_res= datamap.get(index).get("res");
 
-		int index = Integer.parseInt(rows) - 1;
-		String email = datamap.get(index).get("username");
-		String pwd = datamap.get(index).get("password");
-		String exp_res = datamap.get(index).get("res");
+        lp=new LoginPage(BaseClass.getDriver());
+        lp.setEmail(email);
+        lp.setPassword(pwd);
 
-		lp = new LoginPage(BaseClass.getDriver());
-		lp.setEmail(email);
-		lp.setPassword(pwd);
+        lp.clickLogin();
+        macc=new MyAccountPage(BaseClass.getDriver());
+        try
+        {
+            boolean targetpage=macc.isMyAccountPageExists();
+            System.out.println("target page: "+ targetpage);
+            if(exp_res.equals("Valid"))
+            {
+                if(targetpage==true)
+                {
+                    MyAccountPage myaccpage=new MyAccountPage(BaseClass.getDriver());
+                    myaccpage.clickLogout();
+                    Assert.assertTrue(true);
+                }
+                else
+                {
+                    Assert.assertTrue(false);
+                }
+            }
 
-		lp.clickLogin();
-		macc = new MyAccountPage(BaseClass.getDriver());
-		try {
-			boolean targetpage = macc.isMyAccountPageExists();
-			System.out.println("target page: " + targetpage);
-			if (exp_res.equals("Valid")) {
-				if (targetpage == true) {
-					MyAccountPage myaccpage = new MyAccountPage(BaseClass.getDriver());
-					myaccpage.clickLogout();
-					Assert.assertTrue(true);
-				} else {
-					Assert.assertTrue(false);
-				}
-			}
+            if(exp_res.equals("Invalid"))
+            {
+                if(targetpage==true)
+                {
+                    macc.clickLogout();
+                    Assert.assertTrue(false);
+                }
+                else
+                {
+                    Assert.assertTrue(true);
+                }
+            }
 
-			if (exp_res.equals("Invalid")) {
-				if (targetpage == true) {
-					macc.clickLogout();
-					Assert.assertTrue(false);
-				} else {
-					Assert.assertTrue(true);
-				}
-			}
 
-		} catch (Exception e) {
+        }
+        catch(Exception e)
+        {
 
-			Assert.assertTrue(false);
-		}
-	}
-
+            Assert.assertTrue(false);
+        }
+      }
+ 
 }
