@@ -10,16 +10,13 @@ public class LoginPage extends BasePage {
 		super(driver);
 	}
 	
-	@FindBy(xpath = "//h5[@class='oxd-text oxd-text--h5 orangehrm-login-title']")
-	static WebElement loginTitle;
-
-	@FindBy(xpath = "//input[@name='username']")
+	@FindBy(xpath = "//input[@id='input-email']")
 	WebElement txtEmailAddress;
 
-	@FindBy(xpath = "//input[@name='password']")
+	@FindBy(xpath = "//input[@id='input-password']")
 	WebElement txtPassword;
 
-	@FindBy(xpath = "//button[@class='oxd-button oxd-button--medium oxd-button--main orangehrm-login-button']")
+	@FindBy(xpath = "//input[@value='Login']")
 	WebElement btnLogin;
 
 
@@ -35,10 +32,9 @@ public class LoginPage extends BasePage {
 		btnLogin.click();
 	}
 	
-	public String loginTitlecheck(){
-		return loginTitle.getText();
-	}
-
+	/*
+	 * public String loginTitlecheck(){ return loginTitle.getText(); }
+	 */
 	
 
 }
