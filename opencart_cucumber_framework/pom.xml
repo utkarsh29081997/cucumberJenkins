@@ -13,7 +13,6 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-      <replace-properties>opencart_cucumber_framework/src/test/resources/config.properties</replace-properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -43,20 +42,20 @@
 					</plugin>
 					
 					<plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.2.0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
             <executions>
                 <execution>
-                    <id>replace-properties</id>
+                    <phase>initialize</phase>
                     <goals>
-                        <goal>regex-property</goal>
+                        <goal>run</goal>
                     </goals>
                     <configuration>
-                        <file>opencart_cucumber_framework/src/test/resources/config.properties</file>
-                        <regex>^browser=.*$</regex>
-                        <value>browser=${browser}</value>
-                        <failIfNoMatch>false</failIfNoMatch>
+                        <tasks>
+                            <replace file="opencart_cucumber_framework/src/test/resources/config.properties"
+                                     token="browser=*" value="browser=${browser}" />
+                        </tasks>
                     </configuration>
                 </execution>
             </executions>
