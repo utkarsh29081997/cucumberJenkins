@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
 					//features= {".//Features/"},
 					//features= {".//Features/Login.feature"},
 					//features= {".//Features/LoginDDTExcel.feature"},${cucumber.features}
-					features= {".//Feature/ForgotPassword.feature"},
+					features= {".//Features/ForgotPassword.feature"},
 					//features= {".//Features/Registration.feature"},
 					
 					//features= {"@target/rerun.txt"},
